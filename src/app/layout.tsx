@@ -1,57 +1,29 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import React from "react";
+import UserProfile from "./components/UserProfile";
+import { PaymentService } from "./services/PaymentService";
+import { Rectangle, Square } from "./services/Shape";
+import { BasicPrinter } from "./services/Printer";
+import { EmailService } from "./services/EmailService";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export default function App() {
+  const paymentService = new PaymentService();
+  paymentService.processPayment("credit", 100);
 
-const appConfig = {
-  title: "Next Test App",
-  description: "Review this code with SOLID principles",
-  theme: "dark", 
-  version: "1.0.0", 
-  renderFooter: true, 
-};
+  const rect = new Rectangle(10, 5);
+  const square = new Square(5, 5);
+  console.log("Rectangle area:", rect.getArea());
+  console.log("Square area:", square.getArea());
 
-export const metadata: Metadata = {
-  title: appConfig.title,
-  description: appConfig.description,
-};
+  const printer = new BasicPrinter();
+  printer.print();
 
-function renderFooter() {
-  if (!appConfig.renderFooter) return null;
-  return (
-    <footer className="text-center p-4 text-gray-500 text-sm">
-      © {new Date().getFullYear()} - Version {appConfig.version}
-    </footer>
-  );
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const themeClass =
-    appConfig.theme === "dark"
-      ? "bg-black text-white"
-      : "bg-white text-black";
+  const emailService = new EmailService();
+  emailService.notifyUser("user@example.com");
 
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${themeClass}`}
-      >
-        <header className="p-4 border-b">Welcome to {appConfig.title}</header>
-        <main className="min-h-screen">{children}</main>
-        {renderFooter()}
-      </body>
-    </html>
+    <div>
+      <h2>SOLID Violations Demo</h2>
+      <UserProfile />
+    </div>
   );
 }
