@@ -1,57 +1,33 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+"use client";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { useState } from "react";
 
-const appConfig = {
-  title: "Next Test App",
-  description: "Review this code with SOLID principles",
-  theme: "dark", 
-  version: "1.0.0", 
-  renderFooter: true, 
-};
+export default function UserProfile({ user }: { user: any }) {
+  const [theme, setTheme] = useState("dark");
 
-export const metadata: Metadata = {
-  title: appConfig.title,
-  description: appConfig.description,
-};
+  function saveUserData() {
+    localStorage.setItem("user", JSON.stringify(user));
+    fetch("/api/save", {
+      method: "POST",
+      body: JSON.stringify(user),
+    });
+  }
 
-function renderFooter() {
-  if (!appConfig.renderFooter) return null;
-  return (
-    <footer className="text-center p-4 text-gray-500 text-sm">
-      © {new Date().getFullYear()} - Version {appConfig.version}
-    </footer>
-  );
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const themeClass =
-    appConfig.theme === "dark"
-      ? "bg-black text-white"
-      : "bg-white text-black";
+  function toggleTheme() {
+    setTheme(theme === "dark" ? "light" : "dark");
+    document.body.style.background = theme === "dark" ? "black" : "white";
+    document.body.style.color = theme === "dark" ? "white" : "black";
+  }
 
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${themeClass}`}
-      >
-        <header className="p-4 border-b">Welcome to {appConfig.title}</header>
-        <main className="min-h-screen">{children}</main>
-        {renderFooter()}
-      </body>
-    </html>
+    <div style={{ border: "2px solid gray", padding: "20px" }}>
+      <h2>
+        {user.name} ({user.age})
+      </h2>
+      <p>Email: {user.email}</p>
+      <button onClick={saveUserData}>Save</button>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      <p>© 2025 Hardcoded Footer</p>
+    </div>
   );
 }
