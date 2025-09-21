@@ -1,0 +1,18 @@
+[config]
+model = "gemini/gemini-1.5-flash"
+fallback_models = ["anthropic/claude-3-opus-20240229"]
+
+[pr_reviewer]
+extra_instructions = """
+Focus the review on adherence to SOLID principles:
+- SRP: Ensure classes/functions have a single responsibility.
+- OCP: Code should be extendable without requiring modification.
+- LSP: Subtypes must be substitutable for their base types.
+- ISP: Interfaces should be small and not force unused dependencies.
+- DIP: High-level code should depend on abstractions, not low-level implementations.
+Highlight violations and suggest refactorings.
+"""
+
+[pr_code_suggestions]
+num_code_suggestions = 6
+suggestions_score_threshold = 7
