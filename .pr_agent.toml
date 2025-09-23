@@ -12,6 +12,7 @@ Focus the review on adherence to SOLID principles:
 - DIP: High-level code should depend on abstractions, not low-level implementations.
 Highlight violations and suggest refactorings.
 """
+inline_code_comments = true
 
 [pr_code_suggestions]
 num_code_suggestions = 6
